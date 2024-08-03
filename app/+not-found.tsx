@@ -11,7 +11,7 @@ export default function NotFoundScreen() {
         <View padding="$5" flexDirection='column' justifyContent='center' alignContent='center'>
           <Square>
             <Image source={require('../assets/images/not-found.svg')} cachePolicy='memory' contentFit='contain' width="120%" height="70%" scale />
-            </Square>
+          </Square>
 
           <H2 paddingBottom="$3">Page Not Found.</H2>
           <Paragraph size="$5" fontWeight="600">Sorry, we can't find that page. You'll find lots to explore on the home page. If you think this page should've been there, <Link asChild href="/about"><Text fontWeight={800}>inform us</Text></Link> about this</Paragraph>

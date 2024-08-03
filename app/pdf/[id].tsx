@@ -22,7 +22,6 @@ export default function PDFView() {
     const router = useRouter()
     const finalPath = { uri: `file://${path}` }
     const sharePath = `${path}`
-    const { getItem, setItem } = useAsyncStorage('listData');
     const showDialog = () => setVisible(true)
     const hideDialog = () => setVisible(false)
 
@@ -101,29 +100,28 @@ export default function PDFView() {
                 err && console.log(err);
             });
 
-    const renamePdf = async (id, newFilename) => {
-        try {
-            console.log(rename)
-            hideDialog
-            const oldPath = `${path}`;
-            const newPath = `${FileSystem.documentDirectory}${newFilename}.pdf`;
+    // const renamePdf = async (newFilename) => {
+    //     try {
+    //         console.log(rename)
+    //         hideDialog
+    //         const oldPath = `${path}`;
+    //         const newPath = `${FileSystem.documentDirectory}${newFilename}.pdf`;
 
-            // Rename file in file system
-            await FileSystem.moveAsync({ from: oldPath, to: newPath });
+    //         // Rename file in file system
+    //         await FileSystem.moveAsync({ from: oldPath, to: newPath });
 
-            // Update list data in AsyncStorage
-            const listDataString = await AsyncStorage.getItem('listData');
-            const listData = JSON.parse(listDataString || '{}'); // Handle potential null value
-            listData[newFilename] = listData[id]; // Rename the object
-            delete listData[id]; // Remove the old object
-            await AsyncStorage.setItem('listData', JSON.stringify(listData));
+    //         // Update list data in AsyncStorage
+    //         const listData = JSON.parse(await AsyncStorage.getItem('listData') || '[]') // Handle potential null value
+    //         listData[newFilename] = listData[id]; // Rename the object
+    //         delete listData[id]; // Remove the old object
+    //         await AsyncStorage.setItem('listData', JSON.stringify(listData));
 
-            // Update UI or other necessary actions
-        } catch (error) {
-            console.error('Error renaming PDF or list data:', error);
-            // Handle errors appropriately (e.g., display an error message)
-        }
-    };
+    //         // Update UI or other necessary actions
+    //     } catch (error) {
+    //         console.error('Error renaming PDF or list data:', error);
+    //         // Handle errors appropriately (e.g., display an error message)
+    //     }
+    // };
 
     // const downloadPdf = () => {
     //     const dirs = RNFetchBlob.fs.dirs
@@ -144,22 +142,27 @@ export default function PDFView() {
     //             resp.path()
     //         })
     // }
-    const deletePdf = async () => {
-        try {
-            await FileSystem.deleteAsync(`${path}`); // Assuming id is the filename
+    // const deletePdf = async () => {
+    //     try {
+    //         await FileSystem.deleteAsync(`${path}`); // Assuming id is the filename
 
-            // Retrieve and update data in a single step (avoids potential race condition)
-            const listData = JSON.parse(await AsyncStorage.getItem('listData') || '[]'); // Handle potential null value
-            console.log(listData)
-            delete listData[id]; // Remove the object
-            await AsyncStorage.setItem('listData', JSON.stringify(listData));
+    //         // Retrieve and update data in a single step (avoids potential race condition)
+    //         const listData = JSON.parse(await AsyncStorage.getItem('listData') || '[]'); // Handle potential null value
+    //         console.log(listData)
 
-            await router.push('/');
-        } catch (error) {
-            console.error('Error deleting PDF or list data:', error);
-            // Handle errors appropriately (e.g., display an error message)
-        }
-    };
+    //         const index = listData.findIndex((item) => item.id === id);
+
+    //         if (index !== -1) {
+    //             listData.splice(index, 1); // Remove the item from the array
+    //             await AsyncStorage.setItem('listData', JSON.stringify(listData));
+    //         }
+
+    //         await router.push('/');
+    //     } catch (error) {
+    //         console.error('Error deleting PDF or list data:', error);
+    //         // Handle errors appropriately (e.g., display an error message)
+    //     }
+    // };
 
     return (
         <>
@@ -168,15 +171,15 @@ export default function PDFView() {
                 <Appbar.BackAction onPress={() => { router.push('/') }} />
                 <Appbar.Content title="View PDF" />
                 <Text variant="labelMedium">{currentPage}</Text>
-                {path ? (<Appbar.Action icon="export-variant" onPress={() => { openShare() }} />) : null}
-                {path ? (
+                {id ? (<Appbar.Action icon="export-variant" onPress={() => { openShare() }} />) : null}
+                {id ? (
                     <Dialog modal>
                         <Dialog.Trigger asChild>
                             <Appbar.Action icon="dots-vertical" />
                         </Dialog.Trigger>
 
                         <Adapt when="sm" platform="touch">
-                            <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom moveOnKeyboardChange snapPointsMode='percent' snapPoints={[30]}>
+                            <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom moveOnKeyboardChange snapPointsMode='percent' snapPoints={[15]}>
                                 <Sheet.Frame padding="$4" gap="$4">
                                     <Adapt.Contents />
                                 </Sheet.Frame>
@@ -217,26 +220,20 @@ export default function PDFView() {
                                 <Dialog.Title>File Options</Dialog.Title>
 
                                 <YGroup>
-                                    <Dialog.Close asChild>
-                                        <YGroup.Item>
-                                            <ListItem onPress={() => { showDialog() }} hoverTheme pressTheme icon={Edit3} title="Rename" />
-                                        </YGroup.Item>
-                                    </Dialog.Close>
-                                    {/* <Dialog.Close asChild>
+                                    {/* <YGroup.Item>
+                                        <ListItem onPress={() => { showDialog() }} hoverTheme pressTheme icon={Edit3} title="Rename" />
+                                    </YGroup.Item> */}
+                                    {/* 
                                     <YGroup.Item>
                                         <ListItem onPress={() => { downloadPdf() }} hoverTheme pressTheme icon={Download} title="Download" />
                                     </YGroup.Item>
-                                    </Dialog.Close> */}
-                                    <Dialog.Close asChild>
-                                        <YGroup.Item>
-                                            <ListItem onPress={() => { openShare() }} hoverTheme pressTheme icon={TShare} title="Share" />
-                                        </YGroup.Item>
-                                    </Dialog.Close>
-                                    <Dialog.Close asChild>
-                                        <YGroup.Item>
-                                            <ListItem onPress={() => { deletePdf() }} hoverTheme pressTheme icon={Trash2} title="Delete" />
-                                        </YGroup.Item>
-                                    </Dialog.Close>
+                                     */}
+                                    <YGroup.Item>
+                                        <ListItem onPress={() => { openShare() }} hoverTheme pressTheme icon={TShare} title="Share" />
+                                    </YGroup.Item>
+                                    {/* <YGroup.Item>
+                                        <ListItem onPress={() => { deletePdf() }} hoverTheme pressTheme icon={Trash2} title="Delete" />
+                                    </YGroup.Item> */}
                                 </YGroup>
 
                                 <Unspaced>
@@ -256,13 +253,12 @@ export default function PDFView() {
                     </Dialog>
                 ) : null}
             </Appbar.Header>
-            <Portal>
+            {/* <Portal>
                 <RDialog visible={visible} onDismiss={hideDialog}>
                     <RDialog.Title>Rename PDF</RDialog.Title>
                     <RDialog.Content>
                         <Text variant="bodyMedium">Rename your PDF file</Text>
                         <TextInput
-                            mode="outlined"
                             label="File Name"
                             value={rename as string}
                         // onChangeText={updatedFile => setRename(updatedFile)}
@@ -273,7 +269,7 @@ export default function PDFView() {
                         <Button onPress={renamePdf}>Save</Button>
                     </RDialog.Actions>
                 </RDialog>
-            </Portal>
+            </Portal> */}
             {!path ? (
                 <View padding="$5" flexDirection='column' justifyContent='center' alignContent='center'>
                     <Square>

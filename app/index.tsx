@@ -57,7 +57,6 @@ function AppVersion() {
 
 export default function HomePage() {
     // const [selectedSort, setSelectedSort] = useState()
-    const { getItem } = useAsyncStorage('listData');
     const [searchInput, setSearchInput] = React.useState('')
     const [sort, setSort] = React.useState('')
     const [order, setOrder] = React.useState('descending')
@@ -71,7 +70,7 @@ export default function HomePage() {
     const router = useRouter();
 
     const getListData = async () => {
-        const item = await getItem();
+        const item = await AsyncStorage.getItem('listData');
         return item != null ? setCardData(JSON.parse(item)) : null;
     };
 
@@ -221,7 +220,7 @@ export default function HomePage() {
                                                         size="$2"
                                                         type="single"
                                                         disableDeactivation={true}
-                                                        onValueChange={(value) => handleValueChange}
+                                                        onValueChange={filteredCards.length !== 0 ? (value) => handleValueChange(value) : undefined}
                                                         value={viewState}
                                                         disabled={filteredCards.length === 0}
                                                     >
@@ -322,7 +321,7 @@ export default function HomePage() {
                             size="$2"
                             type="single"
                             disableDeactivation={true}
-                            onValueChange={() => handleValueChange}
+                            onValueChange={filteredCards.length !== 0 ? (value) => handleValueChange(value) : undefined}
                             value={viewState}
                             disabled={filteredCards.length === 0}
                         >

@@ -63,21 +63,19 @@ export default function Scanner() {
                     return null; // Return null on error
                 });
 
+                const cardId = Math.random() as number
+
                 // Update card list with PDF details
                 cardList.push({
                     title: filename,
                     path: docPath,
-                    id: Math.random(),
+                    id: cardId,
                     thumbnail: thumbnailPath?.uri, // Use optional chaining to handle null thumbnail
                 });
-                await setItem(JSON.stringify(cardList));
-                console.log(filename)
-                console.log(docPath)
-                console.log(cardList.id as number)
-                console.log(thumbnailPath?.uri)
+                await AsyncStorage.setItem('listData', JSON.stringify(cardList));
                 // console.log(docPath)
                 // Navigate to PDF view
-                await router.push({ pathname: `/pdf/[id]`, params: { id: cardList.id as number, title: filename, path: docPath } });
+                await router.push({ pathname: `/pdf/[id]`, params: { id: cardId, title: filename, path: docPath } });
             }
         } catch (error) {
             console.error('Failed to scan documents:', error);
