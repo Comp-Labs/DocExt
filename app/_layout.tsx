@@ -70,16 +70,6 @@ export default function RootLayout() {
                             <Theme name="blue">
                                 <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                                     <Stack>
-                                        <Stack.Screen
-                                            name="pdf/[id]"
-                                            options={{
-                                                headerShown: false,
-                                                presentation: 'modal',
-                                                title: "Scan",
-                                                gestureEnabled: true,
-                                                gestureDirection: 'horizontal',
-                                            }}
-                                        />
                                     </Stack>
                                 </ThemeProvider>
                             </Theme>

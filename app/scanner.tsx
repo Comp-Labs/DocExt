@@ -71,9 +71,13 @@ export default function Scanner() {
                     thumbnail: thumbnailPath?.uri, // Use optional chaining to handle null thumbnail
                 });
                 await setItem(JSON.stringify(cardList));
+                console.log(filename)
                 console.log(docPath)
+                console.log(cardList.id as number)
+                console.log(thumbnailPath?.uri)
+                // console.log(docPath)
                 // Navigate to PDF view
-                await router.push({ pathname: `/pdf/[id]`, params: { id: docPath, file: filename } });
+                await router.push({ pathname: `/pdf/[id]`, params: { id: cardList.id as number, title: filename, path: docPath } });
             }
         } catch (error) {
             console.error('Failed to scan documents:', error);
