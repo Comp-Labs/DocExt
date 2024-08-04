@@ -1,7 +1,7 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link, Stack } from 'expo-router'
-import { View, Separator, Text, H2, Paragraph, Button, XStack, YStack, Square } from 'tamagui'
-import { Image } from 'expo-image'
+import { Link, Stack } from 'expo-router';
+import { View, Separator, Text, H2, Paragraph, Button, XStack, YStack, Square } from 'tamagui';
+import { Image } from 'expo-image';
 
 export default function NotFoundScreen() {
   return (
@@ -14,7 +14,7 @@ export default function NotFoundScreen() {
           </Square>
 
           <H2 paddingBottom="$3">Page Not Found.</H2>
-          <Paragraph size="$5" fontWeight="600">Sorry, we can't find that page. You'll find lots to explore on the home page. If you think this page should've been there, <Link asChild href="/about"><Text fontWeight={800}>inform us</Text></Link> about this</Paragraph>
+          <Paragraph size="$5" fontWeight="600">Sorry, we can't find that page. You'll find lots to explore on the home page. If you think this page should've been there, <Text fontWeight={800}>inform us</Text> about this</Paragraph>
           <Separator marginVertical={15} />
           <Link href="/" asChild><Button>Back to Homepage</Button></Link>
         </View>

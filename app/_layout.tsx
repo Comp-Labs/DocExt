@@ -2,7 +2,7 @@ import 'expo-dev-client';
 import 'react-native-gesture-handler';
 import { useEffect, useMemo } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useColorScheme } from 'react-native'
+import { useColorScheme, Platform } from 'react-native'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
@@ -47,11 +47,15 @@ export default function RootLayout() {
             SplashScreen.hideAsync()
         }
 
-        QuickActions.setItems<RouterAction>([
+        QuickActions.setItems<RouterAction<"/scanner">>([
             {
                 title: "Scan Document",
                 icon: "compose",
                 id: "0",
+                icon: Platform.select({
+                    ios: "symbol:doc.viewfinder.fill",
+                    android: "add",
+                }),
                 params: { href: "/scanner" },
             }
         ]);

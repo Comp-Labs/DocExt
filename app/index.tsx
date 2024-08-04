@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef, memo } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Platform, PermissionsAndroid, Alert, ScrollView, StyleSheet, RefreshControl, FlatList } from 'react-native'
+import React, { useEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, RefreshControl, FlatList } from 'react-native';
 import * as Application from 'expo-application';
-// import { X, Brush } from '@tamagui/lucide-icons'
-import { Link, Stack, useRouter } from 'expo-router'
+import { Link, Stack, useRouter } from 'expo-router';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { Appbar, AnimatedFAB, Menu, List } from 'react-native-paper';
-import Pdf from 'react-native-pdf'
 import {
     View,
     Button,
@@ -29,116 +27,103 @@ import {
     H6,
     Switch
 } from 'tamagui'
-import { LayoutGrid, List as IconList, CircleEllipsis, FileSearch, X, Settings, Delete, ChevronRight, AArrowDown, AArrowUp } from '@tamagui/lucide-icons'
-// import { fileList } from './scanner';
+import { LayoutGrid, List as IconList, CircleEllipsis, FileSearch, X, Settings, Delete, ChevronRight, AArrowDown, AArrowUp } from '@tamagui/lucide-icons';
 import { SimpleGrid } from 'react-native-super-grid';
 import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import * as FileSystem from 'expo-file-system'
+import * as FileSystem from 'expo-file-system';
 import { fileList } from '../data/documentList';
-import { Image } from 'expo-image'
+import { Image } from 'expo-image';
 
 const sortJsonArray = require('sort-json-array')
-
-const styles = StyleSheet.create({
-    fab: {
-        bottom: 16,
-        position: 'absolute'
-    },
-})
-
-const fabStyle = { right: 16 };
 
 const blurhash =
     '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 function AppVersion() {
-    return <>{`Version ${Application.nativeApplicationVersion}`}</>
+    return <>{`Version ${Application.nativeApplicationVersion}`}</>;
 }
 
 export default function HomePage() {
-    // const [selectedSort, setSelectedSort] = useState()
     const [searchInput, setSearchInput] = React.useState('')
     const [sort, setSort] = React.useState('')
     const [order, setOrder] = React.useState('descending')
     const [isChecked, setIsChecked] = React.useState(true)
     const [viewState, setViewState] = React.useState('grid')
-    const [visible, setVisible] = React.useState(false);
+    const [visible, setVisible] = React.useState(false)
     const [cardData, setCardData] = React.useState(fileList)
-    const [refreshing, setRefreshing] = React.useState(false);
-    const openMenu = () => setVisible(true);
-    const closeMenu = () => setVisible(false);
-    const router = useRouter();
+    const [refreshing, setRefreshing] = React.useState(false)
+    const router = useRouter()
 
     const getListData = async () => {
-        const item = await AsyncStorage.getItem('listData');
+        const item = await AsyncStorage.getItem('listData')
         return item != null ? setCardData(JSON.parse(item)) : null;
-    };
+    }
 
     useEffect(() => {
-        getListData();
-    }, []);
+        getListData()
+    }, [])
 
     const storeLayout = async (value: string) => {
         try {
-            await AsyncStorage.setItem('viewAs', value);
-            setCardData(currentData => ({ ...currentData, viewLayout: value }));
+            await AsyncStorage.setItem('viewAs', value)
+            setCardData(currentData => ({ ...currentData, viewLayout: value }))
         } catch (e) {
             console.error(e)
         }
-    };
+    }
 
     const storeOrder = async (value: string) => {
         try {
-            await AsyncStorage.setItem('order', value);
-            setCardData(currentData => ({ ...currentData, order: value }));
+            await AsyncStorage.setItem('order', value)
+            setCardData(currentData => ({ ...currentData, order: value }))
         } catch (e) {
             console.error(e)
         }
-    };
+    }
 
     const removeData = async () => {
         try {
             const deleteList = await FileSystem.readDirectoryAsync(`${FileSystem.documentDirectory}`)
-            await AsyncStorage.removeItem('listData');
+            await AsyncStorage.removeItem('listData')
             // Filter for PDF files only
-            const pdfFiles = deleteList.filter(file => file.endsWith('.pdf'));
+            const pdfFiles = deleteList.filter(file => file.endsWith('.pdf'))
 
             // Delete each PDF file
             pdfFiles.forEach(async (file) => {
-                const filePath = `${FileSystem.documentDirectory}/${file}`;
-                await FileSystem.deleteAsync(filePath);
-            });
-            setCardData([]);
-            getListData();
+                const filePath = `${FileSystem.documentDirectory}/${file}`
+                await FileSystem.deleteAsync(filePath)
+            })
+            setCardData(fileList)
+            getListData()
         } catch (e) {
             console.error(e)
         }
-    };
+    }
 
     const handleSearchInputChange = (text) => {
-        setSearchInput(text);
-    };
+        setSearchInput(text)
+    }
     const filteredCards = cardData.filter((card) =>
         card.title.toLowerCase().includes(searchInput.toLowerCase())
-    );
+    )
 
     const handleValueChange = (value: string) => {
         storeLayout(value)
         setViewState(value)
-    };
+    }
 
     const handleOrderChange = (value: string) => {
         storeOrder(value)
         setOrder(value)
-    };
+    }
 
     const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
+        setRefreshing(true)
         getListData()
         setTimeout(() => {
-            setRefreshing(false);
+            setRefreshing(false)
         }, 2000);
-    }, []);
+    }, [])
 
     // const handleCheck = (value: boolean) => {
     //     setIsChecked(value)
@@ -219,10 +204,10 @@ export default function HomePage() {
                                                         orientation="horizontal"
                                                         size="$2"
                                                         type="single"
-                                                        disableDeactivation={true}
+                                                        // disableDeactivation={true}
                                                         onValueChange={filteredCards.length !== 0 ? (value) => handleValueChange(value) : undefined}
                                                         value={viewState}
-                                                        disabled={filteredCards.length === 0}
+                                                    // disabled={filteredCards.length === 0}
                                                     >
                                                         <ToggleGroup.Item value="grid" aria-label="View as grid">
                                                             <LayoutGrid />
@@ -245,10 +230,10 @@ export default function HomePage() {
                                                         orientation="horizontal"
                                                         size="$2"
                                                         type="single"
-                                                        disableDeactivation={true}
+                                                        // disableDeactivation={true}
                                                         onValueChange={() => handleOrderChange}
                                                         value={order}
-                                                        disabled={filteredCards.length === 0}
+                                                    // disabled={filteredCards.length === 0}
                                                     >
                                                         <ToggleGroup.Item value="ascending" aria-label="Ascending">
                                                             <AArrowUp />
@@ -320,10 +305,10 @@ export default function HomePage() {
                             orientation="horizontal"
                             size="$2"
                             type="single"
-                            disableDeactivation={true}
+                            // disableDeactivation={true}
                             onValueChange={filteredCards.length !== 0 ? (value) => handleValueChange(value) : undefined}
                             value={viewState}
-                            disabled={filteredCards.length === 0}
+                        // disabled={filteredCards.length === 0}
                         >
                             <ToggleGroup.Item value="grid" aria-label="View as grid">
                                 <LayoutGrid />
@@ -332,14 +317,6 @@ export default function HomePage() {
                                 <IconList />
                             </ToggleGroup.Item>
                         </ToggleGroup>
-                        {/* <Menu
-                                visible={visible}
-                                onDismiss={closeMenu}
-                                anchor={<Button onPress={openMenu} size="$2" chromeless icon={CircleEllipsis}>View Options</Button>}>
-                                <Menu.Item onPress={() => { }} title="View Options" />
-                                <Menu.Item onPress={() => { }} title="About" />
-                            </Menu> */}
-                        {/* <ViewOptionsDialog /> */}
                         <SizableText theme="alt1" size="$1" bottom="$1.25"><Paragraph fontWeight="800">{filteredCards.length}</Paragraph> {filteredCards.length === 1 ? 'Item' : 'Items'}</SizableText>
                     </XStack>
                     {filteredCards.length === 0 ?
@@ -409,7 +386,7 @@ export default function HomePage() {
                                             data={sortJsonArray(filteredCards, 'title', 'asc')}
                                             renderItem={({ item }) =>
                                                 <List.Item
-                                                    onPress={() => { router.push("/pdf/[id]") }}
+                                                    onPress={() => { router.push({ pathname: '/pdf/[id]', params: { id: item.id as number, title: item.title as string, path: item.path as string } }) }}
                                                     title={item.title}
                                                     left={props => <List.Icon {...props} icon="file-pdf-box" />}
                                                 />}
@@ -422,7 +399,7 @@ export default function HomePage() {
                                             data={sortJsonArray(filteredCards, 'title', 'des')}
                                             renderItem={({ item }) =>
                                                 <List.Item
-                                                    onPress={() => { router.push("/pdf/[id]") }}
+                                                    onPress={() => { router.push({ pathname: '/pdf/[id]', params: { id: item.id as number, title: item.title as string, path: item.path as string } }) }}
                                                     title={item.title}
                                                     left={props => <List.Icon {...props} icon="file-pdf-box" />}
                                                 />}
@@ -437,7 +414,7 @@ export default function HomePage() {
                         visible
                         icon={"cube-scan"}
                         label={"Scan Document"}
-                        style={[styles.fab, fabStyle]}
+                        style={{ bottom: 16, right: 16, position: 'absolute' }}
                         extended
                         animateFrom='right'
                         iconMode='dynamic'
@@ -446,14 +423,14 @@ export default function HomePage() {
                 </View>
             </YStack>
         </SafeAreaView >
-    )
+    );
 }
 
 export function NavigationBar({ route, options }) {
-    const title = getHeaderTitle(options, route.name);
-    const [visible, setVisible] = React.useState(false);
-    const openMenu = () => setVisible(true);
-    const closeMenu = () => setVisible(false);
+    const title = getHeaderTitle(options, route.name)
+    const [visible, setVisible] = React.useState(false)
+    const openMenu = () => setVisible(true)
+    const closeMenu = () => setVisible(false)
 
     return (
         <>
@@ -549,5 +526,5 @@ function ViewOptionsDialog() {
                 </Dialog.Content>
             </Dialog.Portal>
         </Dialog>
-    )
+    );
 }

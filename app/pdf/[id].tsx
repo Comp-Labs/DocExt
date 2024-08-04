@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Linking, Platform } from 'react-native'
-import { Stack, useRouter, Link, useLocalSearchParams } from 'expo-router'
-import Pdf from 'react-native-pdf'
+import React from 'react';
+import { Linking, Platform } from 'react-native';
+import { Stack, useRouter, Link, useLocalSearchParams } from 'expo-router';
+import Pdf from 'react-native-pdf';
 import * as Burnt from "burnt";
 import { Appbar, Text, Portal, TextInput, Dialog as RDialog, Button } from 'react-native-paper';
-import Share from "react-native-share"
+import Share from "react-native-share";
 import * as FileSystem from 'expo-file-system';
-import { View, Separator, H2, Paragraph, Button as TButton, Dialog, Adapt, Sheet, Unspaced, YGroup, ListItem, Square } from 'tamagui'
-import { Trash2, Share as TShare, Download, X, Edit3 } from '@tamagui/lucide-icons'
-import { Image } from 'expo-image'
-import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage'
-import RNFetchBlob from 'rn-fetch-blob'
-import { Double } from 'react-native/Libraries/Types/CodegenTypes'
+import { View, Separator, H2, Paragraph, Button as TButton, Dialog, Adapt, Sheet, Unspaced, YGroup, ListItem, Square } from 'tamagui';
+import { Trash2, Share as TShare, Download, X, Edit3 } from '@tamagui/lucide-icons';
+import { Image } from 'expo-image';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export default function PDFView() {
     const { id, title, path } = useLocalSearchParams()
@@ -94,34 +92,34 @@ export default function PDFView() {
     const openShare = () =>
         Share.open(options)
             .then((res) => {
-                console.log(res);
+                console.log(res)
             })
             .catch((err) => {
-                err && console.log(err);
-            });
+                err && console.log(err)
+            })
 
     // const renamePdf = async (newFilename) => {
     //     try {
     //         console.log(rename)
     //         hideDialog
-    //         const oldPath = `${path}`;
-    //         const newPath = `${FileSystem.documentDirectory}${newFilename}.pdf`;
+    //         const oldPath = `${path}`
+    //         const newPath = `${FileSystem.documentDirectory}${newFilename}.pdf`
 
     //         // Rename file in file system
-    //         await FileSystem.moveAsync({ from: oldPath, to: newPath });
+    //         await FileSystem.moveAsync({ from: oldPath, to: newPath })
 
     //         // Update list data in AsyncStorage
     //         const listData = JSON.parse(await AsyncStorage.getItem('listData') || '[]') // Handle potential null value
-    //         listData[newFilename] = listData[id]; // Rename the object
-    //         delete listData[id]; // Remove the old object
-    //         await AsyncStorage.setItem('listData', JSON.stringify(listData));
+    //         listData[newFilename] = listData[id]
+    //         delete listData[id]
+    //         await AsyncStorage.setItem('listData', JSON.stringify(listData))
 
     //         // Update UI or other necessary actions
     //     } catch (error) {
-    //         console.error('Error renaming PDF or list data:', error);
+    //         console.error('Error renaming PDF or list data:', error)
     //         // Handle errors appropriately (e.g., display an error message)
     //     }
-    // };
+    // }
 
     // const downloadPdf = () => {
     //     const dirs = RNFetchBlob.fs.dirs
@@ -144,25 +142,25 @@ export default function PDFView() {
     // }
     // const deletePdf = async () => {
     //     try {
-    //         await FileSystem.deleteAsync(`${path}`); // Assuming id is the filename
+    //         await FileSystem.deleteAsync(`${path}`)
 
     //         // Retrieve and update data in a single step (avoids potential race condition)
-    //         const listData = JSON.parse(await AsyncStorage.getItem('listData') || '[]'); // Handle potential null value
+    //         const listData = JSON.parse(await AsyncStorage.getItem('listData') || '[]')
     //         console.log(listData)
 
-    //         const index = listData.findIndex((item) => item.id === id);
+    //         const index = listData.findIndex((item) => item.id === id)
 
     //         if (index !== -1) {
-    //             listData.splice(index, 1); // Remove the item from the array
-    //             await AsyncStorage.setItem('listData', JSON.stringify(listData));
+    //             listData.splice(index, 1)
+    //             await AsyncStorage.setItem('listData', JSON.stringify(listData))
     //         }
 
-    //         await router.push('/');
+    //         await router.push('/')
     //     } catch (error) {
-    //         console.error('Error deleting PDF or list data:', error);
+    //         console.error('Error deleting PDF or list data:', error)
     //         // Handle errors appropriately (e.g., display an error message)
     //     }
-    // };
+    // }
 
     return (
         <>
@@ -273,7 +271,7 @@ export default function PDFView() {
             {!path ? (
                 <View padding="$5" flexDirection='column' justifyContent='center' alignContent='center'>
                     <Square>
-                        <Image source={require('../../assets/images/loading.svg')} cachePolicy='memory' contentFit='contain' height="60%" width="110%" scale placeholderContentFit='fill' />
+                        <Image source={require('../../assets/images/loading.svg')} cachePolicy='memory' contentFit='contain' width="100%" height="50%" scale placeholderContentFit='fill' />
                     </Square>
 
                     <H2 paddingBottom="$3">No Document Available</H2>
@@ -296,5 +294,5 @@ export default function PDFView() {
                 />
             )}
         </>
-    )
+    );
 }
