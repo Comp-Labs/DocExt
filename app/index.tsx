@@ -90,8 +90,12 @@ export default function HomePage() {
 
             // Delete each PDF file
             pdfFiles.forEach(async (file) => {
-                const filePath = `${FileSystem.documentDirectory}/${file}`
-                await FileSystem.deleteAsync(filePath)
+                try {
+                    const filePath = `${FileSystem.documentDirectory}/${file}`
+                    await FileSystem.deleteAsync(filePath)
+                } catch (e) {
+                    console.error(e)
+                }
             })
             setCardData(fileList)
             getListData()
