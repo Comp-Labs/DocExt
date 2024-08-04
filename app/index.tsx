@@ -56,12 +56,19 @@ export default function HomePage() {
 
     const getListData = async () => {
         const item = await AsyncStorage.getItem('listData')
-        return item != null ? setCardData(JSON.parse(item)) : null;
+        return item != null ? setCardData(JSON.parse(item)) : setCardData(fileList);
     }
 
     useEffect(() => {
         getListData()
     }, [])
+
+    const handleSearchInputChange = (text) => {
+        setSearchInput(text)
+    }
+    const filteredCards = cardData?.filter((card) =>
+        card.title.toLowerCase().includes(searchInput.toLowerCase())
+    )
 
     const storeLayout = async (value: string) => {
         try {
@@ -75,10 +82,20 @@ export default function HomePage() {
     const storeOrder = async (value: string) => {
         try {
             await AsyncStorage.setItem('order', value)
-            setCardData(currentData => ({ ...currentData, order: value }))
+            // setCardData(currentData => ({ ...currentData, order: value }))
         } catch (e) {
             console.error(e)
         }
+    }
+
+    const handleValueChange = (value: string) => {
+        // storeLayout(value)
+        setViewState(value)
+    }
+
+    const handleOrderChange = (value: string) => {
+        storeOrder(value)
+        setOrder(value)
     }
 
     const removeData = async () => {
@@ -102,23 +119,6 @@ export default function HomePage() {
         } catch (e) {
             console.error(e)
         }
-    }
-
-    const handleSearchInputChange = (text) => {
-        setSearchInput(text)
-    }
-    const filteredCards = cardData.filter((card) =>
-        card.title.toLowerCase().includes(searchInput.toLowerCase())
-    )
-
-    const handleValueChange = (value: string) => {
-        storeLayout(value)
-        setViewState(value)
-    }
-
-    const handleOrderChange = (value: string) => {
-        storeOrder(value)
-        setOrder(value)
     }
 
     const onRefresh = React.useCallback(() => {
@@ -186,80 +186,82 @@ export default function HomePage() {
                                     exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
                                     gap="$4"
                                 >
-                                    <Dialog.Title>Settings</Dialog.Title>
-                                    <Dialog.Description>
-                                        Adjust your preferences. Click anywhere outside when you're done.
-                                    </Dialog.Description>
+                                    <ScrollView>
+                                        <Dialog.Title>Settings</Dialog.Title>
+                                        <Dialog.Description>
+                                            Adjust your preferences. Click anywhere outside when you're done.
+                                        </Dialog.Description>
 
-                                    <YGroup alignSelf="center" bordered width="100%" size="$4">
-                                        <YGroup.Item>
-                                            <ListItem onPress={() => { removeData() }} hoverTheme pressTheme icon={Delete} iconAfter={ChevronRight} title="Clear Data" subTitle={`This will clear all the documents from the 'app data'.`} />
-                                        </YGroup.Item>
-                                    </YGroup>
-                                    <H6>View Options</H6>
-                                    <YGroup alignSelf="center" bordered width="100%" size="$4">
-                                        <YGroup.Item>
-                                            <ListItem
-                                                hoverTheme
-                                                pressTheme
-                                                title="View As"
-                                                iconAfter={
-                                                    <ToggleGroup
-                                                        orientation="horizontal"
-                                                        size="$2"
-                                                        type="single"
-                                                        // disableDeactivation={true}
-                                                        onValueChange={filteredCards.length !== 0 ? (value) => handleValueChange(value) : undefined}
-                                                        value={viewState}
-                                                    // disabled={filteredCards.length === 0}
-                                                    >
-                                                        <ToggleGroup.Item value="grid" aria-label="View as grid">
-                                                            <LayoutGrid />
-                                                        </ToggleGroup.Item>
-                                                        <ToggleGroup.Item value="list" aria-label="View as list">
-                                                            <IconList />
-                                                        </ToggleGroup.Item>
-                                                    </ToggleGroup>
-                                                }
-                                            />
-                                        </YGroup.Item>
-                                        <YGroup.Item>
-                                            <ListItem
-                                                hoverTheme
-                                                pressTheme
-                                                title="Order As"
-                                                subTitle="Ascending (Old First) / Descending (New First)"
-                                                iconAfter={
-                                                    <ToggleGroup
-                                                        orientation="horizontal"
-                                                        size="$2"
-                                                        type="single"
-                                                        // disableDeactivation={true}
-                                                        onValueChange={() => handleOrderChange}
-                                                        value={order}
-                                                    // disabled={filteredCards.length === 0}
-                                                    >
-                                                        <ToggleGroup.Item value="ascending" aria-label="Ascending">
-                                                            <AArrowUp />
-                                                        </ToggleGroup.Item>
-                                                        <ToggleGroup.Item value="descending" aria-label="Descending">
-                                                            <AArrowDown />
-                                                        </ToggleGroup.Item>
-                                                    </ToggleGroup>
-                                                }
-                                            />
-                                        </YGroup.Item>
-                                        {/* <ListItem onPress={() => { removeData() }} hoverTheme pressTheme iconAfter={<Switch size="$3" defaultChecked onCheckedChange={handleCheck(isChecked)} value={isChecked}><Switch.Thumb animation="quicker" /></Switch>} title="Show All Filename Extensions" /> */}
-                                    </YGroup>
-                                    <Separator />
-                                    <XStack alignSelf='center' paddingTop="$5">
-                                        <Image style={{ borderRadius: 15 }} source={require('../assets/images/adaptive-icon.png')} width={128} height={128} scale />
-                                        <YStack alignSelf='center'>
-                                            <H6 paddingLeft="$4">Tech Fiddle</H6>
-                                            <H1 paddingLeft="$4">DocExt</H1>
-                                            <H6 paddingLeft="$4">{AppVersion()}</H6>
-                                        </YStack>
-                                    </XStack>
+                                        <YGroup alignSelf="center" bordered width="100%" size="$4">
+                                            <YGroup.Item>
+                                                <ListItem onPress={() => { removeData() }} hoverTheme pressTheme icon={Delete} iconAfter={ChevronRight} title="Clear Data" subTitle={`This will clear all the documents from the 'app data'.`} />
+                                            </YGroup.Item>
+                                        </YGroup>
+                                        <H6>View Options</H6>
+                                        <YGroup alignSelf="center" bordered width="100%" size="$4">
+                                            <YGroup.Item>
+                                                <ListItem
+                                                    hoverTheme
+                                                    pressTheme
+                                                    title="View As"
+                                                    iconAfter={
+                                                        <ToggleGroup
+                                                            orientation="horizontal"
+                                                            size="$2"
+                                                            type="single"
+                                                            // disableDeactivation={true}
+                                                            onValueChange={handleValueChange}
+                                                            value={viewState}
+                                                        // disabled={filteredCards.length === 0}
+                                                        >
+                                                            <ToggleGroup.Item value="grid" aria-label="View as grid">
+                                                                <LayoutGrid />
+                                                            </ToggleGroup.Item>
+                                                            <ToggleGroup.Item value="list" aria-label="View as list">
+                                                                <IconList />
+                                                            </ToggleGroup.Item>
+                                                        </ToggleGroup>
+                                                    }
+                                                />
+                                            </YGroup.Item>
+                                            <YGroup.Item>
+                                                <ListItem
+                                                    hoverTheme
+                                                    pressTheme
+                                                    title="Order As"
+                                                    subTitle="Ascending (Old First) / Descending (New First)"
+                                                    iconAfter={
+                                                        <ToggleGroup
+                                                            orientation="horizontal"
+                                                            size="$2"
+                                                            type="single"
+                                                            // disableDeactivation={true}
+                                                            onValueChange={() => handleOrderChange}
+                                                            value={order}
+                                                        // disabled={filteredCards.length === 0}
+                                                        >
+                                                            <ToggleGroup.Item value="ascending" aria-label="Ascending">
+                                                                <AArrowUp />
+                                                            </ToggleGroup.Item>
+                                                            <ToggleGroup.Item value="descending" aria-label="Descending">
+                                                                <AArrowDown />
+                                                            </ToggleGroup.Item>
+                                                        </ToggleGroup>
+                                                    }
+                                                />
+                                            </YGroup.Item>
+                                            {/* <ListItem onPress={() => { removeData() }} hoverTheme pressTheme iconAfter={<Switch size="$3" defaultChecked onCheckedChange={handleCheck(isChecked)} value={isChecked}><Switch.Thumb animation="quicker" /></Switch>} title="Show All Filename Extensions" /> */}
+                                        </YGroup>
+                                        <Separator />
+                                        <XStack alignSelf='center' paddingTop="$5">
+                                            <Image style={{ borderRadius: 15 }} source={require('../assets/images/adaptive-icon.png')} width={128} height={128} scale />
+                                            <YStack alignSelf='center'>
+                                                <H6 paddingLeft="$4">Tech Fiddle</H6>
+                                                <H1 paddingLeft="$4">DocExt</H1>
+                                                <H6 paddingLeft="$4">{AppVersion()}</H6>
+                                            </YStack>
+                                        </XStack>
+                                    </ScrollView>
 
                                     {/* <XStack alignSelf="flex-end" gap="$4">
                         <Dialog.Close displayWhenAdapted asChild>
