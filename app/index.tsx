@@ -4,7 +4,7 @@ import { ScrollView, RefreshControl, FlatList } from 'react-native';
 import * as Application from 'expo-application';
 import { Link, Stack, useRouter } from 'expo-router';
 import { getHeaderTitle } from '@react-navigation/elements';
-import { Appbar, AnimatedFAB, Menu, List } from 'react-native-paper';
+import { Appbar, AnimatedFAB, Menu, List, Card as RCard, Text as RText } from 'react-native-paper';
 import {
     View,
     Button,
@@ -24,8 +24,7 @@ import {
     Unspaced,
     YGroup,
     ListItem,
-    H6,
-    Switch
+    H6
 } from 'tamagui'
 import { LayoutGrid, List as IconList, CircleEllipsis, FileSearch, X, Settings, Delete, ChevronRight, AArrowDown, AArrowUp } from '@tamagui/lucide-icons';
 import { SimpleGrid } from 'react-native-super-grid';
@@ -187,8 +186,8 @@ export default function HomePage() {
                                     gap="$4"
                                 >
                                     <ScrollView>
-                                        <Dialog.Title>Settings</Dialog.Title>
-                                        <Dialog.Description>
+                                        <Dialog.Title paddingBottom="$3">Settings</Dialog.Title>
+                                        <Dialog.Description paddingBottom="$3">
                                             Adjust your preferences. Click anywhere outside when you're done.
                                         </Dialog.Description>
 
@@ -197,7 +196,7 @@ export default function HomePage() {
                                                 <ListItem onPress={() => { removeData() }} hoverTheme pressTheme icon={Delete} iconAfter={ChevronRight} title="Clear Data" subTitle={`This will clear all the documents from the 'app data'.`} />
                                             </YGroup.Item>
                                         </YGroup>
-                                        <H6>View Options</H6>
+                                        <H6 paddingTop="$3" paddingBottom="$2">View Options</H6>
                                         <YGroup alignSelf="center" bordered width="100%" size="$4">
                                             <YGroup.Item>
                                                 <ListItem
@@ -252,7 +251,7 @@ export default function HomePage() {
                                             </YGroup.Item>
                                             {/* <ListItem onPress={() => { removeData() }} hoverTheme pressTheme iconAfter={<Switch size="$3" defaultChecked onCheckedChange={handleCheck(isChecked)} value={isChecked}><Switch.Thumb animation="quicker" /></Switch>} title="Show All Filename Extensions" /> */}
                                         </YGroup>
-                                        <Separator />
+                                        <Separator paddingBottom="$5" />
                                         <XStack alignSelf='center' paddingTop="$5">
                                             <Image style={{ borderRadius: 15 }} source={require('../assets/images/adaptive-icon.png')} width={128} height={128} scale />
                                             <YStack alignSelf='center'>
@@ -348,16 +347,10 @@ export default function HomePage() {
                                                     data={sortJsonArray(filteredCards, 'title', 'asc')}
                                                     listKey='card'
                                                     renderItem={({ item }) => (
-                                                        <Link href={{ pathname: '/pdf/[id]', params: { id: item.id as number, title: item.title as string, path: item.path as string } }}>
-                                                            <Card size="$2" key={item.id} width={100} height={150} padding="$1">
-                                                                <Card.Header borderRadius="$2" maxHeight="75%">
-                                                                    <Image style={{ borderRadius: 10 }} source={item.thumbnail as string} placeholder={blurhash} cachePolicy="memory" contentFit='contain' width="100%" height="100%" scale />
-                                                                </Card.Header>
-                                                                <Card.Footer paddingHorizontal="$2">
-                                                                    <SizableText size="$1">{item.title}</SizableText>
-                                                                </Card.Footer>
-                                                            </Card>
-                                                        </Link>
+                                                        <RCard onPress={() => { router.push({ pathname: '/pdf/[id]', params: { id: item.id as number, title: item.title as string, path: item.path as string } }) }}>
+                                                            <RCard.Cover source={{ uri: item.thumbnail }} />
+                                                            <RCard.Title title={item.title} />
+                                                        </RCard>
                                                     )}
                                                 />
                                             </ScrollView>
@@ -369,16 +362,10 @@ export default function HomePage() {
                                                     data={sortJsonArray(filteredCards, 'title', 'des')}
                                                     listKey='card'
                                                     renderItem={({ item }) => (
-                                                        <Link href={{ pathname: '/pdf/[id]', params: { id: item.id as number, title: item.title as string, path: item.path as string } }}>
-                                                            <Card size="$2" key={item.id} width={100} height={150} padding="$1">
-                                                                <Card.Header borderRadius="$2" maxHeight="75%">
-                                                                    <Image style={{ borderRadius: 10 }} source={item.thumbnail as string} placeholder={blurhash} cachePolicy="memory" contentFit='contain' width="100%" height="100%" scale />
-                                                                </Card.Header>
-                                                                <Card.Footer paddingHorizontal="$2">
-                                                                    <SizableText size="$1">{item.title}</SizableText>
-                                                                </Card.Footer>
-                                                            </Card>
-                                                        </Link>
+                                                        <RCard onPress={() => { router.push({ pathname: '/pdf/[id]', params: { id: item.id as number, title: item.title as string, path: item.path as string } }) }}>
+                                                            <RCard.Cover source={{ uri: item.thumbnail }} />
+                                                            <RCard.Title titleVariant="labelLarge" title={item.title} />
+                                                        </RCard>
                                                     )}
                                                 />
                                             </ScrollView>
