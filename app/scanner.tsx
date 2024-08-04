@@ -31,7 +31,7 @@ export default function Scanner() {
 
         try {
             // Start the Document Scanner
-            const { scannedImages } = await DocumentScanner.scanDocument()
+            const { scannedImages } = await DocumentScanner.scanDocument({ croppedImageQuality: 50 })
 
             if (scannedImages) {
                 const cardListString = await AsyncStorage.getItem('listData')

@@ -148,7 +148,7 @@ export default function HomePage() {
                             </Dialog.Trigger>
 
                             <Adapt when="sm" platform="touch">
-                                <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom moveOnKeyboardChange snapPointsMode='percent' snapPoints={[70]}>
+                                <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom moveOnKeyboardChange snapPointsMode='percent' snapPoints={[70, 90]}>
                                     <Sheet.Frame padding="$4" gap="$4">
                                         <Adapt.Contents />
                                     </Sheet.Frame>
@@ -461,7 +461,7 @@ function ViewOptionsDialog() {
             </Dialog.Trigger>
 
             <Adapt when="sm" platform="touch">
-                <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom moveOnKeyboardChange snapPointsMode='percent' snapPoints={[30]}>
+                <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom moveOnKeyboardChange snapPointsMode='percent' snapPoints={[15, 30]}>
                     <Sheet.Frame padding="$4" gap="$4">
                         <Adapt.Contents />
                     </Sheet.Frame>
