@@ -201,7 +201,6 @@ export default function HomePage() {
                                             <YGroup.Item>
                                                 <ListItem
                                                     hoverTheme
-                                                    pressTheme
                                                     title="View As"
                                                     iconAfter={
                                                         <ToggleGroup
@@ -226,7 +225,6 @@ export default function HomePage() {
                                             <YGroup.Item>
                                                 <ListItem
                                                     hoverTheme
-                                                    pressTheme
                                                     title="Order As"
                                                     subTitle="Ascending (Old First) / Descending (New First)"
                                                     iconAfter={
@@ -291,7 +289,7 @@ export default function HomePage() {
                             borderRadius="$3"
                             value={searchInput}
                             onChangeText={handleSearchInputChange}
-                            placeholder="🔍  Search"
+                            placeholder="   Search"
                             clearButtonMode="while-editing"
                             cursorColor="#076AF7"
                             enablesReturnKeyAutomatically
