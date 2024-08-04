@@ -329,7 +329,7 @@ export default function HomePage() {
                                     <FileSearch size="$5" />
                                 </YStack>
                             </XStack>
-                            <XStack style={{ justifyContent: 'center', alignItems: 'center' }} opacity={0.6}>
+                            <XStack justifyContent='center' alignContent='center' flexDirection='row' opacity={0.6}>
                                 <YStack justifyContent='center' alignContent='center' flexDirection='row'>
                                     <SizableText>No Documents</SizableText>
                                 </YStack>
