@@ -17,13 +17,21 @@
     },
     "preview": {
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "image": "auto"
+      },
+      "ios": {
+        "image": "auto"
       },
       "distribution": "internal",
       "channel": "preview"
     },
     "production": {
       "channel": "production",
+      "distribution": "store",
+      "cache": {
+        "disabled": true
+      },
       "android": {
         "buildType": "app-bundle",
         "image": "auto"
